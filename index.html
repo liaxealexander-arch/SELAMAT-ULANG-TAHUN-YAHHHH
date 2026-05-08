@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Almira ❤️</title>
+
+<style>
+
+/* RESET */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    overflow:hidden;
+    background:black;
+    font-family:Poppins,sans-serif;
+    width:100vw;
+    height:100vh;
+    transition:2s;
+}
+
+/* MATRIX */
+
+canvas{
+    position:fixed;
+    inset:0;
+    z-index:1;
+    transition:2s;
+}
+
+/* COUNTDOWN */
+
+#countdown{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:130px;
+    font-weight:bold;
+    color:#ff6bb5;
+    z-index:30;
+    text-shadow:0 0 30px #ff6bb5;
+    animation:zoom 1s ease;
+}
+
+@keyframes zoom{
+    from{
+        transform:scale(.5);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+/* WORD SCREEN */
+
+.word-screen{
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:20px;
+    font-size:70px;
+    font-weight:bold;
+    color:#ff85c2;
+    z-index:30;
+    text-shadow:0 0 25px #ff69b4;
+    animation:fadeWord 1s ease;
+}
+
+@keyframes fadeWord{
+    from{
+        opacity:0;
+        transform:scale(.7);
+    }
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+/* MAIN */
+
+.main{
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:10;
+}
+
+/* STARS */
+
+.stars{
+    position:fixed;
+    inset:0;
+    z-index:2;
+}
+
+.star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    background:white;
+    border-radius:50%;
+    animation:blink 3s infinite;
+}
+
+@keyframes blink{
+    0%,100%{
+        opacity:.2;
+    }
+    50%{
+        opacity:1;
+    }
+}
+
+/* PINK BACKGROUND */
+
+.pink-bg{
+    background:#ffb6d9;
+}
+
+/* HIDE MATRIX */
+
+.hide-matrix canvas{
+    opacity:0;
+}
+
+/* FALLING HEART */
+
+.falling-heart{
+    position:fixed;
+    top:-50px;
+    color:#ff4fa3;
+    z-index:2;
+    pointer-events:none;
+    animation:fallHeart linear forwards;
+}
+
+@keyframes fallHeart{
+
+    from{
+        transform:translateY(-100px) rotate(0deg);
+        opacity:1;
+    }
+
+    to{
+        transform:translateY(110vh) rotate(360deg);
+        opacity:.8;
+    }
+}
+
+/* FLOAT HEART */
+
+.float-heart{
+    position:absolute;
+    color:pink;
+    animation:float 5s linear infinite;
+    z-index:2;
+}
+
+@keyframes float{
+
+    from{
+        transform:translateY(100vh);
+        opacity:1;
+    }
+
+    to{
+        transform:translateY(-100px);
+        opacity:0;
+    }
+}
+
+/* ENVELOPE WRAP */
+
+.envelope-wrap{
+    position:relative;
+    width:330px;
+    height:520px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+/* LETTER */
+
+.letter{
+    position:absolute;
+    width:320px;
+    height:460px;
+    background:white;
+    border-radius:22px;
+    z-index:15;
+    overflow:hidden;
+    padding:16px;
+    box-shadow:0 0 30px rgba(255,105,180,.3);
+
+    transform:translateY(120px);
+    opacity:0;
+
+    transition:1.5s;
+    perspective:1200px;
+}
+
+/* OPEN */
+
+.envelope-wrap.open .letter{
+    transform:translateY(-30px);
+    opacity:1;
+}
+
+/* ENVELOPE */
+
+.envelope{
+    position:absolute;
+    width:320px;
+    height:220px;
+    bottom:0;
+    z-index:5;
+}
+
+/* BODY */
+
+.env-body{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:white;
+    border-radius:14px;
+    overflow:hidden;
+}
+
+/* FLAP */
+
+.flap{
+    position:absolute;
+    top:0;
+    width:100%;
+    height:100%;
+    background:#ffd7e8;
+    clip-path:polygon(0 0,50% 55%,100% 0);
+    transform-origin:top;
+    transition:1.5s;
+    z-index:20;
+}
+
+.envelope-wrap.open .flap{
+    transform:rotateX(180deg);
+    opacity:0;
+    pointer-events:none;
+}
+
+/* SIDES */
+
+.left{
+    position:absolute;
+    left:0;
+    width:50%;
+    height:100%;
+    background:#ffe7f1;
+    clip-path:polygon(0 0,100% 50%,0 100%);
+}
+
+.right{
+    position:absolute;
+    right:0;
+    width:50%;
+    height:100%;
+    background:#ffe7f1;
+    clip-path:polygon(100% 0,0 50%,100% 100%);
+}
+
+.bottom{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:100%;
+    background:white;
+    clip-path:polygon(0 100%,50% 50%,100% 100%);
+}
+
+/* HEART */
+
+.heart{
+    position:absolute;
+    top:85px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:34px;
+    z-index:21;
+    transition:1s;
+}
+
+.envelope-wrap.open .heart{
+    opacity:0;
+}
+
+/* CARD */
+
+.card{
+    position:absolute;
+    inset:0;
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+
+    opacity:0;
+
+    transform:rotateY(90deg) scale(.95);
+
+    transition:1s;
+
+    backface-visibility:hidden;
+}
+
+.card.active{
+    opacity:1;
+    transform:rotateY(0deg) scale(1);
+    z-index:5;
+}
+
+/* MESSAGE */
+
+.message{
+    background:white;
+    border-radius:15px;
+    padding:14px;
+    text-align:center;
+    color:#c05687;
+    font-size:18px;
+    margin-bottom:14px;
+    font-family:cursive;
+}
+
+/* PHOTOS */
+
+.photos{
+    flex:1;
+    display:flex;
+    gap:10px;
+}
+
+.photos img{
+    width:50%;
+    object-fit:cover;
+    border-radius:16px;
+    border:2px solid #ffcce0;
+}
+
+/* LAST PAGE */
+
+.last-page{
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-size:30px;
+    color:#c05687;
+    padding:20px;
+    font-family:cursive;
+}
+
+/* CLICK AREA */
+
+.click-left{
+    position:absolute;
+    left:0;
+    top:0;
+    width:50%;
+    height:100%;
+    z-index:30;
+}
+
+.click-right{
+    position:absolute;
+    right:0;
+    top:0;
+    width:50%;
+    height:100%;
+    z-index:30;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- MATRIX -->
+<canvas id="matrix"></canvas>
+
+<!-- COUNTDOWN -->
+<div id="countdown">3</div>
+
+<!-- WORD SCREEN -->
+<div class="word-screen" id="wordScreen"></div>
+
+<!-- STARS -->
+<div class="stars" id="stars"></div>
+
+<!-- MAIN -->
+<div class="main" id="main">
+
+    <!-- ENVELOPE WRAP -->
+    <div class="envelope-wrap" id="wrap">
+
+        <!-- LETTER -->
+        <div class="letter">
+
+            <!-- PAGE 1 -->
+            <div class="card active">
+
+                <div class="message">
+                    Happy Birthday Sayang ❤️
+                </div>
+
+                <div class="photos">
+                    <img src="foto1.jpg">
+                    <img src="foto2.jpg">
+                </div>
+
+            </div>
+
+            <!-- PAGE 2 -->
+            <div class="card">
+
+                <div class="message">
+                    As long as you're smiling, I'm happy ❤️
+                </div>
+
+                <div class="photos">
+                    <img src="foto3.jpg">
+                    <img src="foto4.jpg">
+                </div>
+
+            </div>
+
+            <!-- PAGE 3 -->
+            <div class="card">
+
+                <div class="last-page">
+                    Makasih udah hadir di hidup aku ❤️
+                </div>
+
+            </div>
+
+            <!-- CLICK -->
+            <div class="click-left"></div>
+            <div class="click-right"></div>
+
+        </div>
+
+        <!-- ENVELOPE -->
+        <div class="envelope">
+
+            <div class="env-body">
+
+                <div class="left"></div>
+                <div class="right"></div>
+                <div class="bottom"></div>
+
+            </div>
+
+            <div class="flap"></div>
+
+            <div class="heart">❤️</div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+/* COUNTDOWN */
+
+let count = 3;
+
+const countdown = document.getElementById("countdown");
+
+const interval = setInterval(()=>{
+
+    count--;
+
+    if(count > 0){
+
+        countdown.innerHTML = count;
+
+    }else{
+
+        countdown.style.display = "none";
+
+        clearInterval(interval);
+
+        showWords();
+    }
+
+},1000);
+
+/* WORD SCREEN */
+
+const words = [
+    "HAPPY",
+    "BIRTHDAY",
+    "TO",
+    "ALMIRA SHIDQIYA ❤️"
+];
+
+let wordIndex = 0;
+
+const wordScreen = document.getElementById("wordScreen");
+
+function showWords(){
+
+    wordScreen.style.display = "flex";
+
+    wordScreen.innerHTML = words[wordIndex];
+
+    setTimeout(()=>{
+
+        wordIndex++;
+
+        if(wordIndex < words.length){
+
+            wordScreen.style.animation = "none";
+
+            void wordScreen.offsetWidth;
+
+            wordScreen.style.animation = "fadeWord 1s ease";
+
+            showWords();
+
+        }else{
+
+            wordScreen.style.display = "none";
+
+            startMain();
+        }
+
+    },1200);
+}
+
+/* START MAIN */
+
+function startMain(){
+
+    document.body.classList.add("pink-bg");
+
+    document.body.classList.add("hide-matrix");
+
+    document.getElementById("main").style.display = "flex";
+
+    setTimeout(()=>{
+
+        document.getElementById("wrap").classList.add("open");
+
+    },500);
+}
+
+/* MATRIX */
+
+const canvas = document.getElementById("matrix");
+
+const ctx = canvas.getContext("2d");
+
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+const letters = "HAPPY BIRTHDAY ";
+
+const size = 14;
+
+const columns = canvas.width / size;
+
+const drops = [];
+
+for(let x=0;x<columns;x++){
+    drops[x]=1;
+}
+
+function draw(){
+
+    ctx.fillStyle = "rgba(0,0,0,.07)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    ctx.fillStyle = "#ff4fa3";
+
+    ctx.font = size + "px monospace";
+
+    for(let i=0;i<drops.length;i++){
+
+        const text = letters[Math.floor(Math.random()*letters.length)];
+
+        ctx.fillText(text,i*size,drops[i]*size);
+
+        if(drops[i]*size > canvas.height && Math.random() > .975){
+
+            drops[i]=0;
+        }
+
+        drops[i]++;
+    }
+}
+
+setInterval(draw,35);
+
+/* STARS */
+
+const stars = document.getElementById("stars");
+
+for(let i=0;i<120;i++){
+
+    const s = document.createElement("div");
+
+    s.classList.add("star");
+
+    s.style.left = Math.random()*100+"%";
+
+    s.style.top = Math.random()*100+"%";
+
+    s.style.animationDelay = Math.random()*5+"s";
+
+    stars.appendChild(s);
+}
+
+/* HEART RAIN */
+
+function createFallingHeart(){
+
+    const heart = document.createElement("div");
+
+    heart.classList.add("falling-heart");
+
+    heart.innerHTML = "💖";
+
+    heart.style.left = Math.random()*100+"vw";
+
+    heart.style.fontSize = (Math.random()*25+15)+"px";
+
+    heart.style.animationDuration = (Math.random()*3+4)+"s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(()=>{
+
+        heart.remove();
+
+    },7000);
+}
+
+setInterval(createFallingHeart,200);
+
+/* FLOAT HEART */
+
+function createHeart(){
+
+    const h = document.createElement("div");
+
+    h.classList.add("float-heart");
+
+    h.innerHTML = "❤️";
+
+    h.style.left = Math.random()*100+"%";
+
+    h.style.fontSize = (Math.random()*20+15)+"px";
+
+    document.body.appendChild(h);
+
+    setTimeout(()=>{
+        h.remove();
+    },5000);
+}
+
+setInterval(createHeart,700);
+
+/* PAGE SYSTEM */
+
+const cards = document.querySelectorAll(".card");
+
+let current = 0;
+
+function showPage(index){
+
+    cards.forEach(card=>{
+        card.classList.remove("active");
+    });
+
+    cards[index].classList.add("active");
+}
+
+/* NEXT */
+
+document.querySelector(".click-right").onclick = ()=>{
+
+    if(current < cards.length-1){
+
+        current++;
+
+        showPage(current);
+    }
+}
+
+/* BACK */
+
+document.querySelector(".click-left").onclick = ()=>{
+
+    if(current > 0){
+
+        current--;
+
+        showPage(current);
+    }
+}
+
+</script>
+
+</body>
+</html>
